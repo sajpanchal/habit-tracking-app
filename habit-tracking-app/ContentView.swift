@@ -9,15 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     
-   
-    @State var activities: [Activity] = Activities.retrieveData()
+  @ObservedObject var object = Activities()
+  
     @State var title: String = ""
     @State var description: String = ""
     @State var count: Int = 0
     @State var addActivityForm: Bool = false
-    var activityList: [String] {
+   var activityList: [String] {
         var str: [String] = []
-        for activity in activities {
+    for activity in object.activities {
             str.append(activity.title)
         }
         return str
@@ -29,14 +29,13 @@ struct ContentView: View {
              
                 Form {
                     List {
-                        ForEach(0..<activityList.count, id:\.self) { activity in
+                        ForEach(0..<object.activities.count, id:\.self) { activity in
                             
                            //navigation link works only within Navigation View
                             NavigationLink(
-                                destination: ActivityView(activities: activities, index: activity)
+                                destination: ActivityView(object: object, index: activity)
                                 , label: {
-                                    Text(activityList[activity])
-                                   
+                                    Text(object.activities[activity].title)
                                 })
                         }
                     }
@@ -51,8 +50,8 @@ struct ContentView: View {
                         Button(action: {
                             
                             let activity = Activity(title: title, description: description, count: 0)
-                            activities.append(activity)
-                            Activities.storeData(activities: activities)
+                            object.activities.append(activity)
+                            Activities.storeData(activities: object.activities)
                          
                             self.addActivityForm.toggle()
                             

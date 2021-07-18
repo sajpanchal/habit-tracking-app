@@ -1,4 +1,5 @@
-//
+//    init(activities: [Activity]) {
+
 //  ActivityView.swift
 //  habit-tracking-app
 //
@@ -8,22 +9,21 @@
 import SwiftUI
 
 struct ActivityView: View {
-    @State var activities: [Activity] = Activities.retrieveData()
+    @ObservedObject var object: Activities
     @State var index: Int
     @State var disableButton: Bool = false
  
     var body: some View {
        
         return Form {
-            Text("Title: \(activities[index].title)")
-            Text("Description: \(activities[index].description)")
-            Text("Times Completed:\(activities[index].count)")
+            Text("Title: \(object.activities[index].title)")
+            Text("Description: \(object.activities[index].description)")
+            Text("Times Completed:\(object.activities[index].count)")
         
             Button("Complete Activity") {
-                activities[index].count += 1
-                print(activities[index].count)
+                object.activities[index].count += 1
                 self.disableButton = true
-                Activities.storeData(activities: activities)
+                Activities.storeData(activities: object.activities)
             }.disabled(disableButton)
             
         }
@@ -32,6 +32,6 @@ struct ActivityView: View {
 
 struct ActivityView_Previews: PreviewProvider {
     static var previews: some View {
-        ActivityView(activities: [], index: 0)
+        ActivityView(object: Activities(), index: 0)
     }
 }

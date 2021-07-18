@@ -6,7 +6,7 @@
 //
 
 import Foundation
-class Activity: Codable {
+struct Activity: Codable {
     
     var title: String
     var description: String
